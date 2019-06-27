@@ -5,6 +5,8 @@ import com.qf.pojo.UserInfo;
 import com.qf.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by DELL on 2019/6/27.
@@ -12,14 +14,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserInfoServiceImpl implements UserInfoService{
 
-    {
-        System.out.println("init UserInfoServiceImpl");
-    }
     @Autowired
     UserInfoMapper userInfoMapper;
 
     public UserInfo getById(int id){
         return userInfoMapper.getById(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean addUserInfo(UserInfo userInfo) {
+        int count = userInfoMapper.addUserInfo(userInfo);
+        if(count>0){
+            return true;
+        }
+        return false;
     }
 
 }

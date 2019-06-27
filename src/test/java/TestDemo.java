@@ -1,5 +1,7 @@
+import com.qf.pojo.MenuInfo;
 import com.qf.pojo.User;
 import com.qf.pojo.UserInfo;
+import com.qf.service.MenuInfoService;
 import com.qf.service.UserInfoService;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 
 /**
  * Created by DELL on 2019/6/27.
@@ -23,10 +26,21 @@ public class TestDemo {
     @Autowired(required = false)
     UserInfoService userInfoService;
 
+    @Autowired
+    MenuInfoService menuInfoService;
+
     @Test
     public void test(){
-        UserInfo userInfo = userInfoService.getById(3);
-        System.out.println(userInfo);
+//        UserInfo userInfo = userInfoService.getById(3);
+//        System.out.println(userInfo);
+//
+//        UserInfo userInfo = new UserInfo();
+//        userInfo.setUserName("小彬彬");
+//        userInfo.setPassword("123456");
+//        userInfoService.addUserInfo(userInfo);
+
+        List<MenuInfo> menuInfoList = menuInfoService.listAllMenuInfo();
+        System.out.println(menuInfoList);
     }
 
 

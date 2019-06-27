@@ -7,4 +7,6 @@ import com.qf.pojo.UserInfo;
  */
 public interface UserInfoService {
     public UserInfo getById(int id);
+
+    public boolean addUserInfo(UserInfo userInfo);
 }

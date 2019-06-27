@@ -8,4 +8,6 @@ import com.qf.pojo.UserInfo;
 public interface UserInfoMapper {
 
     public UserInfo getById(int id);
+
+    public int addUserInfo(UserInfo userInfo);
 }

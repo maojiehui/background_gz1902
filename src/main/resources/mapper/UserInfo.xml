@@ -7,4 +7,8 @@
     <select id="getById" parameterType="int" resultType="com.qf.pojo.UserInfo">
         SELECT * FROM UserInfo where userid = #{id}
     </select>
+
+    <insert id="addUserInfo" parameterType="com.qf.pojo.UserInfo">
+        INSERT INTO USERINFO VALUES (DEFAULT ,#{userName},#{password},#{regEmail},#{mobile},#{icon})
+    </insert>
 </mapper>
