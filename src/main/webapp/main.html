@@ -62,24 +62,9 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
 			<div class="tree">
-				<ul style="padding-left:0px;" class="list-group">
-					<li class="list-group-item tree-closed" >
-						<a href="main.html"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a> 
-					</li>
-					<li class="list-group-item tree-closed">
-						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span> 
-						<ul style="margin-top:10px;display:none;">
-							<li style="height:30px;">
-								<a href="user.html"><i class="glyphicon glyphicon-user"></i> 用户维护</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="role.html"><i class="glyphicon glyphicon-king"></i> 角色维护</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="permission.html"><i class="glyphicon glyphicon-lock"></i> 许可维护</a> 
-							</li>
-						</ul>
-					</li>
+				<ul style="padding-left:0px;" class="list-group"
+				id="menuList">
+
 					<li class="list-group-item tree-closed">
 						<span><i class="glyphicon glyphicon-ok"></i> 业务审核 <span class="badge" style="float:right">3</span></span> 
 						<ul style="margin-top:10px;display:none;">
@@ -94,35 +79,7 @@
 							</li>
 						</ul>
 					</li>
-					<li class="list-group-item tree-closed">
-						<span><i class="glyphicon glyphicon-th-large"></i> 业务管理 <span class="badge" style="float:right">7</span></span> 
-						<ul style="margin-top:10px;display:none;">
-							<li style="height:30px;">
-								<a href="cert.html"><i class="glyphicon glyphicon-picture"></i> 资质维护</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="type.html"><i class="glyphicon glyphicon-equalizer"></i> 分类管理</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="process.html"><i class="glyphicon glyphicon-random"></i> 流程管理</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="advertisement.html"><i class="glyphicon glyphicon-hdd"></i> 广告管理</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="message.html"><i class="glyphicon glyphicon-comment"></i> 消息模板</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="project_type.html"><i class="glyphicon glyphicon-list"></i> 项目分类</a> 
-							</li>
-							<li style="height:30px;">
-								<a href="tag.html"><i class="glyphicon glyphicon-tags"></i> 项目标签</a> 
-							</li>
-						</ul>
-					</li>
-					<li class="list-group-item tree-closed" >
-						<a href="param.html"><i class="glyphicon glyphicon-list-alt"></i> 参数管理</a> 
-					</li>
+
 				</ul>
 			</div>
         </div>
@@ -158,20 +115,69 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 	<script src="script/docs.min.js"></script>
         <script type="text/javascript">
-            $(function () {
-			    $(".list-group-item").click(function(){
+
+
+            function showDisplay() {
+                $(".list-group-item").click(function(){
                     // jquery对象的回调方法中的this关键字为DOM对象
                     // $(DOM) ==> JQuery
-				    if ( $(this).find("ul") ) { // 3 li
-						$(this).toggleClass("tree-closed");
-						if ( $(this).hasClass("tree-closed") ) {
-							$("ul", this).hide("fast");
-						} else {
-							$("ul", this).show("fast");
-						}
-					}
-				});
-            });
+                    if ( $(this).find("ul") ) { // 3 li
+                        $(this).toggleClass("tree-closed");
+                        if ( $(this).hasClass("tree-closed") ) {
+                            $("ul", this).hide("fast");
+                        } else {
+                            $("ul", this).show("fast");
+                        }
+                    }
+                });
+            }
+
+			function initMenuTree() {
+				//1.从服务器拉取数据
+//                listMenuByUserId
+                $.ajax({
+                    //提交数据的类型 POST GET
+                    type:"POST",
+					async:false,
+                    //提交的网址
+                    url:"listMenuByUserId",
+                    //返回数据的格式
+                    datatype: "json",//"xml", "html", "script", "json", "jsonp", "text".
+                    //成功返回之后调用的函数
+                    contentType:"application/json",
+                    success:function(returnData){
+                        console.log(returnData);
+						var innerHTMLText = "";
+						$.each(returnData,function(index,item){
+						    var parentMenu = item;
+						    innerHTMLText +="<li class=\"list-group-item tree-closed\">";
+						    innerHTMLText +="<span><i class=\"glyphicon glyphicon-ok\"></i> "+item.name+" <span class=\"badge\" style=\"float:right\">"+item.children.length+"</span></span>";
+                            innerHTMLText +="<ul style=\"margin-top:10px;display:none;\">";
+						    $.each(parentMenu.children,function (indexChild,itemChild) {
+
+								innerHTMLText += "<li style=\"height:30px;\">";
+								innerHTMLText += "<a href=\""+itemChild.url+"\"><i class=\"glyphicon glyphicon-check\"></i> "+itemChild.name+"</a>";
+								innerHTMLText += "</li>";
+
+                            })
+                            innerHTMLText +="</ul> " +
+								"</li>";
+
+//                            console.log(innerHTMLText);
+						})
+						$("#menuList").html(innerHTMLText);
+                    },
+                    //调用出错执行的函数
+                    error: function(responseText){
+                        //请求出错处理
+                        console.error(responseText);
+                    }
+                });
+            }
+            initMenuTree();
+
+
+            showDisplay();
         </script>
   </body>
 </html>

@@ -30,4 +30,8 @@ public class UserInfoServiceImpl implements UserInfoService{
         return false;
     }
 
+    public UserInfo loginCheck(UserInfo userInfo) {
+        return userInfoMapper.loginCheck(userInfo);
+    }
+
 }

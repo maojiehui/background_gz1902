@@ -24,8 +24,7 @@
     </select>
 
     <select id="getMenuByUserId" resultMap="menuMap" parameterType="int">
-         select tb1.pid,tb1.pname,tb1.purl,tb1.picon,tb1.cid,tb1.cname,tb1.curl,tb1.cicon,IF(rm.menuid is null,'false','true') checked from (select m1.MENUID pid,m1.MENUNAME pname,m1.MENU_URL purl,m1.MENUICON picon,m2.MENUID cid,m2.MENUNAME cname,m2.MENU_URL curl,m2.MENUICON cicon
- from menuinfo m1,menuinfo m2 where m1.MENUID = m2.PARENTID) tb1 LEFT JOIN role_menu rm on tb1.cid = rm.menuid and rm.roleid in(select ur.roleid from user_role ur where ur.userid = #{userId})
-
+    select tb1.pid,tb1.pname,tb1.purl,tb1.picon,tb1.cid,tb1.cname,tb1.curl,tb1.cicon,IF(rm.menuid is null,'false','true') checked from (select m1.MENUID pid,m1.MENUNAME pname,m1.MENU_URL purl,m1.MENUICON picon,m2.MENUID cid,m2.MENUNAME cname,m2.MENU_URL curl,m2.MENUICON cicon
+    from menuinfo m1,menuinfo m2 where m1.MENUID = m2.PARENTID) tb1 RIGHT JOIN role_menu rm on tb1.cid = rm.menuid and rm.roleid in(select ur.roleid from user_role ur where ur.userid = #{userId})
     </select>
 </mapper>

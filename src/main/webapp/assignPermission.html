@@ -236,10 +236,6 @@
 			    //1.操作ztree获取其中被选择的cheked的id
 				var checkedNodes = myTree.getCheckedNodes();
 				var idList = new Array();
-//				for(var i=0;i<checkedNodes.size();i++){
-//				    var itemId = checkedNodes[i].id;
-//				    idList.push(itemId);
-//				}
 				$.each(checkedNodes,function (index,item) {
                     	idList.push(item.id);
                     }

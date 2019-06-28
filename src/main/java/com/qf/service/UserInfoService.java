@@ -9,4 +9,6 @@ public interface UserInfoService {
     public UserInfo getById(int id);
 
     public boolean addUserInfo(UserInfo userInfo);
+
+    public UserInfo loginCheck(UserInfo userInfo);
 }
