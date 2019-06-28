@@ -4,23 +4,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qf.mapper.MenuInfoMapper">
-    <resultMap id="menuMap" type="com.qf.pojo.MenuInfo">
-        <id property="menuId" column="pid"/>
-        <result property="menuName" column="pname"/>
+    <resultMap id="menuMap" type="com.qf.dto.MenuInfoDto">
+        <id property="id" column="pid"/>
+        <result property="name" column="pname"/>
         <result property="url" column="purl"/>
-        <result property="menuicon" column="picon"/>
-        <collection property="child" ofType="com.qf.pojo.MenuInfo">
-            <id property="menuId"  column="cid"></id>
-            <result property="menuName" column="cname"></result>
+        <result property="icon" column="picon"/>
+        <collection property="children" ofType="com.qf.dto.MenuInfoDto">
+            <id property="id"  column="cid"></id>
+            <result property="name" column="cname"></result>
             <result property="url" column="curl"></result>
-            <result property="menuicon" column="cicon"></result>
+            <result property="icon" column="cicon"></result>
+            <result property="checked" column="checked"></result>
         </collection>
     </resultMap>
 
-    <select id="listAllMenuInfo" resultMap="menuMap">
-    select m1.MENUID pid,m1.MENUNAME pname,m1.MENU_URL purl,
-    m1.MENUICON picon,m2.MENUID cid,m2.MENUNAME cname,
-    m2.MENU_URL curl,m2.MENUICON cicon
-    from menuinfo m1,menuinfo m2 where m1.MENUID = m2.PARENTID
+    <select id="listAllMenuInfo" resultMap="menuMap" parameterType="int">
+ select *,IF(rm.menuid is null,'false','true') checked from (select m1.MENUID pid,m1.MENUNAME pname,m1.MENU_URL purl,m1.MENUICON picon,m2.MENUID cid,m2.MENUNAME cname,m2.MENU_URL curl,m2.MENUICON cicon
+ from menuinfo m1,menuinfo m2 where m1.MENUID = m2.PARENTID) tb1 LEFT JOIN role_menu rm on tb1.cid = rm.menuid and rm.roleid = #{roleId}
+    </select>
+
+    <select id="getMenuByUserId" resultMap="menuMap" parameterType="int">
+         select tb1.pid,tb1.pname,tb1.purl,tb1.picon,tb1.cid,tb1.cname,tb1.curl,tb1.cicon,IF(rm.menuid is null,'false','true') checked from (select m1.MENUID pid,m1.MENUNAME pname,m1.MENU_URL purl,m1.MENUICON picon,m2.MENUID cid,m2.MENUNAME cname,m2.MENU_URL curl,m2.MENUICON cicon
+ from menuinfo m1,menuinfo m2 where m1.MENUID = m2.PARENTID) tb1 LEFT JOIN role_menu rm on tb1.cid = rm.menuid and rm.roleid in(select ur.roleid from user_role ur where ur.userid = #{userId})
+
     </select>
 </mapper>

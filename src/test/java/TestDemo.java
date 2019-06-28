@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by DELL on 2019/6/27.
@@ -39,8 +40,12 @@ public class TestDemo {
 //        userInfo.setPassword("123456");
 //        userInfoService.addUserInfo(userInfo);
 
-        List<MenuInfo> menuInfoList = menuInfoService.listAllMenuInfo();
-        System.out.println(menuInfoList);
+//        List<MenuInfo> menuInfoList = menuInfoService.listAllMenuInfo(1);
+//        System.out.println(menuInfoList);
+
+        Set<MenuInfo> menuByUserId = menuInfoService.getMenuByUserId(1);
+        System.out.println(menuByUserId);
+
     }
 
 
